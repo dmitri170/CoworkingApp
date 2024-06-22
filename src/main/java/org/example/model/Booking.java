@@ -1,8 +1,8 @@
-package org.example;
+package org.example.model;
 
 import java.time.LocalDateTime;
 
-public class Booking {
+public class Booking {//бронирование
     private int bookingId;
     private static int idCounter = 1;
     private int userId;

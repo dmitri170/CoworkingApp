@@ -1,11 +1,12 @@
-package org.example;
+package org.example.model;
 
-public class ConferenceRoom {
+public class Workstation {//рабочее место
     private int id;
+    private static int idCounter = 1;
     private boolean isAvailable;
 
-    public ConferenceRoom(int id) {
-        this.id = id;
+    public Workstation() {
+        this.id = idCounter++;
         this.isAvailable = true;
     }
 

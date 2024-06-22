@@ -1,10 +1,10 @@
-package org.example;
+package org.example.model;
 
-public class Workstation {
+public class ConferenceRoom {//конференц зал
     private int id;
     private boolean isAvailable;
 
-    public Workstation(int id) {
+    public ConferenceRoom(int id) {
         this.id = id;
         this.isAvailable = true;
     }

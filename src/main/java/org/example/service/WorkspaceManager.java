@@ -1,4 +1,9 @@
-package org.example;
+package org.example.service;
+
+import org.example.model.Booking;
+import org.example.model.ConferenceRoom;
+import org.example.model.User;
+import org.example.model.Workstation;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -6,15 +11,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class WorkspaceManager {
-    private HashMap<Integer, Workstation> workstations = new HashMap<>();
-    private HashMap<Integer, ConferenceRoom> conferenceRooms = new HashMap<>();
-    private List<Booking> bookings = new ArrayList<>();
-    private List<User> users= new ArrayList<>();
-    private User currentUser;
+public class WorkspaceManager {//Менеджер рабочих мест
+    protected HashMap<Integer, Workstation> workstations = new HashMap<>();
+    protected HashMap<Integer, ConferenceRoom> conferenceRooms = new HashMap<>();
+    protected List<Booking> bookings = new ArrayList<>();
+    protected List<User> users= new ArrayList<>();
+    protected User currentUser;
 
     public void addWorkstation(int workstationId) {
-        workstations.put(workstationId, new Workstation(workstationId));
+        workstations.put(workstationId, new Workstation());
     }
 
     public void addConferenceRoom(int roomId) {
@@ -116,6 +121,41 @@ public class WorkspaceManager {
         System.out.println("Список всех доступных ресурсов:");
         workstations.values().forEach(workstation -> System.out.println("Workstation ID: " + workstation.getId()));
         conferenceRooms.values().forEach(room -> System.out.println("Conference Room ID: " + room.getId()));
+    }
+    public List<Booking> filterBookingsByCriteria(String criteria) {
+        return bookings.stream()
+                .filter(booking -> bookingMatchesCriteria(booking, criteria))
+                .collect(Collectors.toList());
+    }
+
+    private boolean bookingMatchesCriteria(Booking booking, String criteria) {
+        if (criteria == null || criteria.isEmpty()) {
+            return false;
+        }
+
+        // Примеры критериев поиска:
+        // Поиск по ID пользователя
+        if (criteria.startsWith("user:")) {
+            int userId = Integer.parseInt(criteria.substring(5));
+            return booking.getUserId() == userId;
+        }
+
+        // Поиск по ID ресурса
+        if (criteria.startsWith("resource:")) {
+            int resourceId = Integer.parseInt(criteria.substring(9));
+            return booking.getResourceId() == resourceId;
+        }
+        // Поиск по начальному времени бронирования
+        if (criteria.startsWith("startTime:")) {
+            LocalDateTime startDate = LocalDateTime.parse(criteria.substring(10));
+            return booking.getStartTime().isEqual(startDate);
+            // Можно использовать isEqual для сравнения двух LocalDateTime
+        }
+        // Другие примеры критериев поиска:
+        // Можете добавить другие варианты поиска по дате, времени, статусу бронирования и т.д.
+
+        // Если критерий не соответствует ни одному из примеров, возвращаем false
+        return false;
     }
 
 }

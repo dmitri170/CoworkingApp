@@ -1,6 +1,6 @@
-package org.example;
+package org.example.model;
 
-public class User {
+public class User {//Пользователь
     private static int idCounter = 1;
     private int id;
     private String userName;
