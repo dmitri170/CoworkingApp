@@ -1,10 +1,13 @@
 package org.example.service;
 
+import org.example.model.Workstation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class WorkspaceManagerTest {
     private WorkspaceManager workspaceManager;
@@ -39,5 +42,73 @@ public class WorkspaceManagerTest {
         manager.registerUser("testUser", "password123");
         manager.login("testUser", "password123");
         assertNotNull(manager.currentUser);
+    }
+    @Test
+    public void testBookWorkspaceSuccess() {
+        WorkspaceManager manager = new WorkspaceManager();
+        manager.registerUser("testUser", "password123");
+        manager.addWorkstation(1);
+        manager.login("testUser", "password123");
+
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endTime = startTime.plusHours(2);
+
+        manager.bookWorkspace(1, startTime, endTime);
+
+        assertEquals(1, manager.bookings.size());
+    }
+
+    @Test
+    public void testBookWorkspaceFailure_WorkstationNotFound() {
+        WorkspaceManager manager = new WorkspaceManager();
+        manager.registerUser("testUser", "password123");
+
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endTime = startTime.plusHours(2);
+
+        manager.bookWorkspace(1, startTime, endTime);
+
+        assertEquals(0, manager.bookings.size());
+    }
+
+    @Test
+    public void testLoginFailure_InvalidCredentials() {
+        WorkspaceManager manager = new WorkspaceManager();
+        manager.registerUser("testUser", "password123");
+
+        manager.login("testUser", "wrongPassword");
+
+        assertNull(manager.currentUser);
+    }
+
+    @Test
+    public void testCancelBooking() {
+        WorkspaceManager manager = new WorkspaceManager();
+        manager.registerUser("testUser", "password123");
+        manager.addWorkstation(1);
+        manager.login("testUser", "password123");
+
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endTime = startTime.plusHours(2);
+
+        manager.bookWorkspace(1, startTime, endTime);
+
+        int bookingId = manager.bookings.get(0).getBookingId();
+        manager.cancelBooking(bookingId);
+
+        assertTrue(manager.bookings.isEmpty());
+    }
+
+    @Test
+    public void testFindAvailableWorkstations() {
+        WorkspaceManager manager = new WorkspaceManager();
+        manager.addWorkstation(1);
+        manager.addWorkstation(2);
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endTime = startTime.plusHours(2);
+
+        List<Workstation> availableWorkstations = manager.findAvailableWorkstations(startTime, endTime);
+
+        assertEquals(2, availableWorkstations.size());
     }
 }
