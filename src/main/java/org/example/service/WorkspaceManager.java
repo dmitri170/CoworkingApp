@@ -149,11 +149,7 @@ public class WorkspaceManager {//Менеджер рабочих мест
         if (criteria.startsWith("startTime:")) {
             LocalDateTime startDate = LocalDateTime.parse(criteria.substring(10));
             return booking.getStartTime().isEqual(startDate);
-            // Можно использовать isEqual для сравнения двух LocalDateTime
         }
-        // Другие примеры критериев поиска:
-        // Можете добавить другие варианты поиска по дате, времени, статусу бронирования и т.д.
-
         // Если критерий не соответствует ни одному из примеров, возвращаем false
         return false;
     }
