@@ -5,7 +5,7 @@ import org.example.service.WorkspaceManager;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-public class Coworking {
+public class CoworkingApp {
     public static void main(String[] args) throws IOException {
         // Создание экземпляра WorkspaceManager
        WorkspaceManager workspaceManager = new WorkspaceManager();
@@ -52,30 +52,4 @@ public class Coworking {
       //  menu(workspaceManager);
     }
 
-  // public static void menu(WorkspaceManager workspaceManager) {
-
-  //     try {
-
-  //         BufferedReader bufferedReader=new BufferedReader(new FileReader("src/main/resources/information.txt"));
-  //         while (bufferedReader.ready()){
-  //             System.out.println(bufferedReader.readLine());
-  //         }
-  //         Scanner scanner=new Scanner(System.in);
-  //         int numberMenu=scanner.nextInt();
-  //         while (numberMenu!=0){
-  //             switch (numberMenu){
-  //                 case 1:
-  //                     workspaceManager.registerUser("user1", "password1");
-  //                     break;
-  //                 default:
-  //                     break;
-  //             }
-  //         }
-  //     }
-  //     catch (IOException e)
-  //     {
-  //         e.printStackTrace();
-  //     }
-
-  // }
 }
