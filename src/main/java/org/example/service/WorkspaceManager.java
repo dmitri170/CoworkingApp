@@ -19,11 +19,19 @@ public class WorkspaceManager {//Менеджер рабочих мест
     protected User currentUser;
 
     public void addWorkstation(int workstationId) {
-        workstations.put(workstationId, new Workstation());
+        try {
+            workstations.put(workstationId, new Workstation());
+        } catch (Exception e) {
+            System.out.println("Ошибка при добавлении рабочего места: " + e.getMessage());
+        }
     }
 
     public void addConferenceRoom(int roomId) {
-        conferenceRooms.put(roomId, new ConferenceRoom(roomId));
+        try {
+            conferenceRooms.put(roomId, new ConferenceRoom(roomId));
+        }catch (Exception e) {
+            System.out.println("Ошибка при добавлении конференц зала: " + e.getMessage());
+        }
     }
     public void registerUser(String username, String password) {
         users.add(new User(username, password));
@@ -32,11 +40,12 @@ public class WorkspaceManager {//Менеджер рабочих мест
         for (User user : users) {
             if (user.getUserName().equals(username) && user.getPassword().equals(password)) {
                 currentUser = user;
-                System.out.println("Successfully logged in as " + currentUser.getUserName());
+                System.out.println("Успешно вошли в систему как " + currentUser.getUserName());
                 return;
             }
         }
-        System.out.println("Login failed. Invalid username or password.");
+        System.out.println("\n" +
+                "Ошибка входа. Неправильное имя пользователя или пароль.");
     }
 
     public void bookWorkspace(int workstationId, LocalDateTime startTime, LocalDateTime endTime) {
@@ -67,15 +76,15 @@ public class WorkspaceManager {//Менеджер рабочих мест
     }
     public void cancelBooking(int bookingId) {
         bookings.removeIf(booking -> booking.getBookingId() == bookingId);
-        System.out.println("Booking with ID " + bookingId + " has been cancelled.");
+        System.out.println("Бронирование с ID " + bookingId + " было отменено");
     }
     public void viewBookings() {
         for (Booking booking : bookings) {
-            System.out.println("Booking ID: " + booking.getBookingId() +
-                    ", User: " + users.get(booking.getUserId()).getUserName() +
-                    ", Resource ID: " + booking.getResourceId() +
-                    ", Start Time: " + booking.getStartTime() +
-                    ", End Time: " + booking.getEndTime());
+            System.out.println("Бронирование ID: " + booking.getBookingId() +
+                    ", Пользователь: " + users.get(booking.getUserId()).getUserName() +
+                    ", Ресурс ID: " + booking.getResourceId() +
+                    ", Начальная дата: " + booking.getStartTime() +
+                    ", Конечная дата: " + booking.getEndTime());
         }
     }
     // Редактирование существующего бронирования
@@ -89,7 +98,7 @@ public class WorkspaceManager {//Менеджер рабочих мест
             if (isWorkspaceAvailable(workstations.get(booking.getResourceId()), newStartTime, newEndTime)) {
                 booking.setStartTime(newStartTime);
                 booking.setEndTime(newEndTime);
-                System.out.println("Booking with ID " + bookingId + " has been updated.");
+                System.out.println("Бронирование с ID " + bookingId + " было обновлено");
             } else {
                 System.out.println("Ошибка: Новые даты конфликтуют с другими бронированиями.");
             }
@@ -110,7 +119,7 @@ public class WorkspaceManager {//Менеджер рабочих мест
 
         if (booking != null) {
             bookings.remove(booking);
-            System.out.println("Booking with ID " + bookingId + " has been cancelled by the admin.");
+            System.out.println("Бронирование с ID " + bookingId + " было отменено админом.");
         } else {
             System.out.println("Ошибка: Бронирование с ID " + bookingId + " не найдено.");
         }
@@ -119,8 +128,8 @@ public class WorkspaceManager {//Менеджер рабочих мест
     // Функция просмотра списка всех ресурсов (рабочих мест и конференц-залов)
     public void viewAllResources() {
         System.out.println("Список всех доступных ресурсов:");
-        workstations.values().forEach(workstation -> System.out.println("Workstation ID: " + workstation.getId()));
-        conferenceRooms.values().forEach(room -> System.out.println("Conference Room ID: " + room.getId()));
+        workstations.values().forEach(workstation -> System.out.println("Рабочее место ID: " + workstation.getId()));
+        conferenceRooms.values().forEach(room -> System.out.println("Конференц зал ID: " + room.getId()));
     }
     public List<Booking> filterBookingsByCriteria(String criteria) {
         return bookings.stream()
@@ -133,7 +142,6 @@ public class WorkspaceManager {//Менеджер рабочих мест
             return false;
         }
 
-        // Примеры критериев поиска:
         // Поиск по ID пользователя
         if (criteria.startsWith("user:")) {
             int userId = Integer.parseInt(criteria.substring(5));

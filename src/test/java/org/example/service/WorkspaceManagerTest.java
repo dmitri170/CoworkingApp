@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.model.Booking;
 import org.example.model.Workstation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -110,5 +111,23 @@ public class WorkspaceManagerTest {
         List<Workstation> availableWorkstations = manager.findAvailableWorkstations(startTime, endTime);
 
         assertEquals(2, availableWorkstations.size());
+    }
+    @Test
+    public void testEditBooking() {
+        workspaceManager.registerUser("testUser", "password123");
+        workspaceManager.addWorkstation(1);
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endTime = startTime.plusHours(1);
+        workspaceManager.login("testUser", "password123");
+        workspaceManager.bookWorkspace(1, startTime, endTime);
+
+        Booking booking = workspaceManager.bookings.get(0);
+        LocalDateTime newStartTime = startTime.plusHours(1);
+        LocalDateTime newEndTime = endTime.plusHours(1);
+
+        workspaceManager.editBooking(booking.getBookingId(), newStartTime, newEndTime);
+
+        assertEquals(newStartTime, booking.getStartTime());
+        assertEquals(newEndTime, booking.getEndTime());
     }
 }

@@ -57,4 +57,15 @@ public class Booking {//бронирование
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "bookingId=" + bookingId +
+                ", userId=" + userId +
+                ", resourceId=" + resourceId +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                '}'+"\n";
+    }
 }
