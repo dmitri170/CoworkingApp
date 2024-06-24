@@ -65,8 +65,6 @@ public class CoworkingApp {
 
        // Поиск доступных рабочих мест
        // List<Workstation> availableWorkstations = workspaceManager.findAvailableWorkstations(LocalDateTime.now(), LocalDateTime.now().plusHours(3));
-
-       // Отмена бронирования администратором
        // workspaceManager.cancelBookingByAdmin(bookingId); // Замените bookingId на фактический ID бронирования
 
     }
